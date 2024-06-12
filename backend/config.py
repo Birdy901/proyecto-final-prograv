@@ -5,7 +5,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG=True
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Ch33sk!ng2@localhost:5432/BibliotecaMisticaThalindor'
+    SQLALCHEMY_DATABASE_URI = config('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 config = {
