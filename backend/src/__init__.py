@@ -19,4 +19,6 @@ def init_app(configname):
     #Blueprints
     app.register_blueprint(IndexRoutes.main, url_prefix='/')
     app.register_blueprint(BookRoutes.main, url_prefix='/libro_blueprint')
+    app.register_blueprint(LibraryRoutes.main, url_prefix='/biblioteca_blueprint')
+    app.register_blueprint(AuthRoutes.main, url_prefix='/auth_blueprint')
     return app

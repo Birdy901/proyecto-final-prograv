@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from src.models.BookModel import Libros, libros_schema
 
 main=Blueprint('libro_blueprint', __name__)

@@ -1,7 +1,5 @@
 from src.models.database import db
-from flask_marshmallow import Marshmallow
-
-ma = Marshmallow()
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, fields
 
 class Libros(db.Model):
     __tablename__ = 'Libros'
@@ -27,8 +25,10 @@ class Libros(db.Model):
         self.Genero = Genero
         self.Idioma = Idioma
 
-class LibroSchema(ma.Schema):
+class LibroSchema(SQLAlchemyAutoSchema):
     class Meta:
-        fields = ('Id_Libro', 'Titulo', 'Autor', 'Editorial', 'Fecha_publicacion', 'ISBN', 'Paginas', 'Genero', 'Idioma')
+        model = Libros
+        load_instance = True
 
+libro = fields.Nested(LibroSchema)
 libros_schema = LibroSchema(many=True)
