@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, request, abort
-from src.models.UserModel import Usuario, usuario_schema
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+
+from src.models.UserModel import Usuario
 from src.models.database import db
-from werkzeug.security import generate_password_hash, check_password_hash
 
 main=Blueprint('auth_blueprint', __name__)
 
@@ -11,22 +12,17 @@ def registrar_usuario():
     password = request.json["Password"]
     nombre = request.json["Nombre"]
 
-    user_exists = Usuario.query.filter_by(Email=email).first() is not None
+    if Usuario.query.filter_by(Email=email).first():
+        return jsonify({"msg": "Ya existe un usuario con este correo electronico"}), 400
 
-    if user_exists:
-        return jsonify({
-            "error": "Este usuario ya existe"
-        }), 409
-
-    hashed_password = generate_password_hash(password)
-    new_user = Usuario(Id_Usuario=None,Email=email, Nombre=nombre,Password=hashed_password)
+    new_user = Usuario(Email=email, Nombre=nombre)
+    new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({
-        "id": new_user.Id_Usuario,
-        "email": new_user.Email
-    })
+        "Email": email, 
+        "msg": "El usuario ha sido creado correctamente"}), 201
 
 @main.route('/login', methods=['POST'])
 def login():
@@ -38,9 +34,19 @@ def login():
     if usuario is None:
         return jsonify({"error":"No autorizado"}), 401
     
-    if not usuario and check_password_hash(Usuario.Password, password):
-        return jsonify({"error":"No autorizado"}), 401
-    
-    return jsonify({
-        "message":"Conectado correctamente",
-        "Id_Usuario":usuario.i })
+    if usuario and usuario.check_password(password):
+        access_token = create_access_token(identity=usuario.Id_Usuario)
+        return jsonify(access_token=access_token), 200
+    else:
+        return jsonify({"error":"Contraseña o Email incorrectos"}), 401
+
+@main.route('/logout', methods=['POST'])
+@jwt_required()
+def logout():
+    return jsonify({"msg": "Cierre de sesión exitoso"}), 200
+
+@main.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user_id = get_jwt_identity()
+    return jsonify(logged_in_as=current_user_id), 200

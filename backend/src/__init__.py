@@ -1,8 +1,12 @@
 from flask import Flask
 from config import config
-from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
 
+#database
 from src.models.database import db
+
+#JWT
+jwt = JWTManager()
 
 #Routes
 from .routes import AuthRoutes, LibraryRoutes, IndexRoutes, BookRoutes
@@ -15,6 +19,7 @@ def init_app(configname):
     app.config.from_object(config[configname])
 
     db.init_app(app)
+    jwt.init_app(app)
 
     #Blueprints
     app.register_blueprint(IndexRoutes.main, url_prefix='/')
