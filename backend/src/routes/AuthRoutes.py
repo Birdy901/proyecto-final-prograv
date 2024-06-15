@@ -32,13 +32,13 @@ def login():
     usuario = Usuario.query.filter_by(Email=email).first()
 
     if usuario is None:
-        return jsonify({"error":"No autorizado"}), 401
+        return jsonify({"error":"No existe un usuario con este email"}), 401
     
     if usuario and usuario.check_password(password):
         access_token = create_access_token(identity=usuario.Id_Usuario)
         return jsonify(access_token=access_token), 200
     else:
-        return jsonify({"error":"Contraseña o Email incorrectos"}), 401
+        return jsonify({"error":"Contraseña incorrecta"}), 401
 
 @main.route('/logout', methods=['POST'])
 def logout():

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, TextField, Box, Typography, Link, autocompleteClasses, Container } from '@mui/material';
+import { Button, TextField, Box, Typography, Link, Container, Alert } from '@mui/material';
 import API from '../../Api';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -17,6 +18,7 @@ const Login = () => {
         navigate('/');
         } catch (error) {
         console.error('Error logging in:', error);
+        setError(error.response.data.error || 'Error desconocido');
         }
     };
 
@@ -38,6 +40,7 @@ const Login = () => {
                 }}
             >
             <Typography variant='h5' align='center' color='primary'>Inicio de sesión</Typography>
+            {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
             <TextField
                 label="Email"
                 type="email"
