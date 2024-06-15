@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Pagination } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Pagination, Button } from '@mui/material';
 
 export default function Libros() {
     const [libros, setLibros] = useState([]);
@@ -24,9 +24,21 @@ export default function Libros() {
     setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    const handleAgregarBiblioteca = async (idLibro) => {
+        try {
+            const response = await axios.post('http://127.0.0.1:5000/biblioteca_blueprint/biblioteca', 
+                { Id_Libro: idLibro, Estado: false },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                        'Content-Type': 'application/json'
+                    },
+                }
+            );
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error añadiendo libro:', error);
+        }
     };
 
     return (
@@ -47,6 +59,7 @@ export default function Libros() {
                 <TableCell>Paginas</TableCell>
                 <TableCell>Genero</TableCell>
                 <TableCell>Idioma</TableCell>
+                <TableCell>Agregar a Biblioteca</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -61,6 +74,15 @@ export default function Libros() {
                 <TableCell>{libro.Paginas}</TableCell>
                 <TableCell>{libro.Genero}</TableCell>
                 <TableCell>{libro.Idioma}</TableCell>
+                <TableCell>
+                    <Button 
+                        variant="outlined" 
+                        color="primary"
+                        onClick={() => handleAgregarBiblioteca(libro.Id_Libro)}
+                    >
+                        Agregar a biblioteca
+                    </Button>
+                </TableCell>
                 </TableRow>
             ))}
             </TableBody>
