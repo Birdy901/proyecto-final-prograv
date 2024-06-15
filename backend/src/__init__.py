@@ -1,12 +1,16 @@
 from flask import Flask
 from config import config
 from flask_jwt_extended import JWTManager
+from flask_marshmallow import Marshmallow
 
 #database
 from src.models.database import db
 
 #JWT
 jwt = JWTManager()
+
+#Marshmallow
+ma = Marshmallow()
 
 #Routes
 from .routes import AuthRoutes, LibraryRoutes, IndexRoutes, BookRoutes
@@ -20,6 +24,7 @@ def init_app(configname):
 
     db.init_app(app)
     jwt.init_app(app)
+    ma.init_app(app)
 
     #Blueprints
     app.register_blueprint(IndexRoutes.main, url_prefix='/')
