@@ -14,8 +14,8 @@ def get_libros():
     id_Usuario = get_jwt_identity()
 
     #Paginado
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 50, type=int)
+    page = request.args.get('page', type=int)
+    per_page = request.args.get('per_page', type=int)
 
     biblioteca_pagination = Biblioteca.query.filter_by(Id_Usuario=id_Usuario).paginate(page=page, per_page=per_page)
 

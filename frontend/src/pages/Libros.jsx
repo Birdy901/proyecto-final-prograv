@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Pagination, Button } from '@mui/material';
+import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Pagination, Button, Snackbar } from '@mui/material';
 
 export default function Libros() {
     const [libros, setLibros] = useState([]);
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(50);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
     useEffect(() => {
         const fetchLibros = async () => {
             try {
-            const response = await axios.get('http://127.0.0.1:5000/libro_blueprint/libros?page=${page}&per_page=${rowsPerPage}');
+            const response = await axios.get(`http://127.0.0.1:5000/libro_blueprint/libros?page=${page}&per_page=${rowsPerPage}`);
             setLibros(response.data);
             } catch (error) {
             console.error('Error fetching data:', error);
@@ -36,9 +38,18 @@ export default function Libros() {
                 }
             );
             console.log(response.data);
+
+            setSnackbarMessage(response.data.msg);
+            setSnackbarOpen(true);
         } catch (error) {
             console.error('Error añadiendo libro:', error);
+            setSnackbarMessage('Este libro ya ha sido agregado');
+            setSnackbarOpen(true);
         }
+    };
+
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
     };
 
     return (
@@ -90,9 +101,17 @@ export default function Libros() {
         </TableContainer>
         <Pagination
             count={Math.floor(libros.length /50 )+1}
+            page={page}
             onChange={handleChangePage}
             size='large'
         />
+        <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                message={snackbarMessage}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            />
     </Container>
     );
 }
