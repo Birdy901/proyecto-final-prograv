@@ -10,7 +10,7 @@ export default function Libros() {
     useEffect(() => {
         const fetchLibros = async () => {
             try {
-            const response = await axios.get('http://127.0.0.1:5000/libro_blueprint/libros?page=${page}&per_page=${rowsPerPage}');
+            const response = await axios.get(`http://127.0.0.1:5000/libro_blueprint/libros?page=${page}&per_page=${rowsPerPage}`);
             setLibros(response.data);
             } catch (error) {
             console.error('Error fetching data:', error);
@@ -90,6 +90,7 @@ export default function Libros() {
         </TableContainer>
         <Pagination
             count={Math.floor(libros.length /50 )+1}
+            page={page}
             onChange={handleChangePage}
             size='large'
         />
