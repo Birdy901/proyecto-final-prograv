@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify, request
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask import Blueprint, jsonify, request, make_response
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, unset_jwt_cookies
 
 from src.models.UserModel import Usuario
 from src.models.database import db
@@ -41,9 +41,10 @@ def login():
         return jsonify({"error":"Contraseña o Email incorrectos"}), 401
 
 @main.route('/logout', methods=['POST'])
-@jwt_required()
 def logout():
-    return jsonify({"msg": "Cierre de sesión exitoso"}), 200
+    response = make_response(jsonify({"msg": "Cierre de sesión exitoso"}))
+    unset_jwt_cookies(response)
+    return response, 200
 
 @main.route('/protected', methods=['GET'])
 @jwt_required()

@@ -1,5 +1,6 @@
 import { AppBar, Box, Button, Drawer, IconButton, Toolbar, Typography } from "@mui/material";
 import NavListDrawer from "./NavListDrawer";
+import LogoutButton from "../Session/Logout";
 
 import {useState} from "react";
 
@@ -54,6 +55,7 @@ export default function Navbar() {
                             </Button>
                             ))
                         }
+                        <LogoutButton/>
                     </Box>
                     
 

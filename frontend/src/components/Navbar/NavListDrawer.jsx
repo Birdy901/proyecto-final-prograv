@@ -1,4 +1,5 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import LogoutButton from "../Session/Logout";
 
 export default function NavListDrawer({NavLinksArray, NavLink, setOpen}) {
     return(
@@ -22,7 +23,9 @@ export default function NavListDrawer({NavLinksArray, NavLink, setOpen}) {
                             </ListItem>
                         ))
                     }
-                    
+                    <ListItem disablePadding>
+                        <LogoutButton />
+                    </ListItem>
                 </List>
             </nav>
         </Box>

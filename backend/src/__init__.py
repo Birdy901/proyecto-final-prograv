@@ -26,7 +26,7 @@ def init_app(configname):
     db.init_app(app)
     jwt.init_app(app)
     ma.init_app(app)
-    CORS(app)
+    CORS(app, supports_credentials=True, expose_headers='Authorization')
 
     #Blueprints
     app.register_blueprint(IndexRoutes.main, url_prefix='/')
