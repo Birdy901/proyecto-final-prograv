@@ -1,19 +1,18 @@
 from config import config
 from src import init_app
 
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
+from src.models.database import db
 
-configuration = config['development']
+configuration = 'development'
 app = init_app(configuration)
 
-db = SQLAlchemy(app)
 with app.app_context():
 
     conn = db.engine.connect()
 
     # Comprobar si la conexión a la base de datos se ha establecido correctamente
     try:
+        from sqlalchemy import text
         query = text('SELECT 1')
 
         result = conn.execute(query)
