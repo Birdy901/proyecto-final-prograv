@@ -12,7 +12,16 @@ main=Blueprint('biblioteca_blueprint', __name__)
 @jwt_required()
 def get_libros():
     id_Usuario = get_jwt_identity()
-    bibliotecas = Biblioteca.query.filter_by(Id_Usuario=id_Usuario).all()
+
+    #Paginado
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 50, type=int)
+
+    biblioteca_pagination = Biblioteca.query.filter_by(Id_Usuario=id_Usuario).paginate(page=page, per_page=per_page)
+
+    #Resultados
+    bibliotecas = biblioteca_pagination.items
+
     result = bibliotecas_schema.dump(bibliotecas)
     return jsonify(result)
 
