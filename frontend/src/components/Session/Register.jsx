@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import API from '../../Api';
 
@@ -21,7 +21,7 @@ const Registro = () => {
             console.log(response.data);
             navigate('/login');
         } catch (error) {
-            setError('Error al registrar usuario. Por favor, intenta nuevamente.');
+            setError(error.response.data.msg || 'Error desconocido');
             console.error('Error registrando usuario:', error);
         }
     };
@@ -53,6 +53,7 @@ const Registro = () => {
                     },
                 }}
             >
+                {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
                 <Typography variant="h5" gutterBottom>
                     Registro de Usuario
                 </Typography>
@@ -80,7 +81,6 @@ const Registro = () => {
                     fullWidth
                     required
                 />
-                {error && <Typography color="error" variant="body2" mt={2}>{error}</Typography>}
                 <Button type="submit" variant="contained" color="primary" fullWidth mt={2}>
                     Registrarse
                 </Button>
@@ -89,4 +89,4 @@ const Registro = () => {
     );
 };
 
-export default Registro;
+export default Registro; 
