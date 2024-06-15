@@ -10,7 +10,7 @@ export default function Biblioteca() {
     useEffect(() => {
         const fetchLibros = async () => {
             try {
-            const response = await axios.get('http://127.0.0.1:5000/biblioteca_blueprint/biblioteca?page=${page}&per_page=${rowsPerPage}', {
+            const response = await axios.get(`http://127.0.0.1:5000/biblioteca_blueprint/biblioteca?page=${page}&per_page=${rowsPerPage}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                     },
@@ -112,6 +112,7 @@ export default function Biblioteca() {
         </TableContainer>
         <Pagination
             count={Math.floor(libros.length /50 )+1}
+            page={page}
             onChange={handleChangePage}
             size='large'
         />
