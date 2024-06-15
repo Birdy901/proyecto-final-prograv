@@ -4,6 +4,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 
 //rutas de sesiones
 import Login from "./components/Session/Login";
+import Registro from "./components/Session/Register";
 
 //rutas protegidas
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -17,7 +18,7 @@ export default function App() {
   const location = useLocation();
   
   // Rutas que no deberían mostrar la Navbar
-  const noNavBarRoutes = ['/login'];
+  const noNavBarRoutes = ['/login', '/registro'];
 
   return(
     <>
@@ -25,6 +26,7 @@ export default function App() {
         <Container  sx={{mt:3}}>
             <Routes>
                 <Route path="/login" element={<Login/>}></Route>
+                <Route path="/registro" element={<Registro/>}></Route>
                 <Route path="/" element={<ProtectedRoute><Home/></ProtectedRoute>}></Route>
                 <Route path="/biblioteca" element={<ProtectedRoute><Biblioteca/></ProtectedRoute>}></Route>
                 <Route path="/libros" element={<ProtectedRoute><Libros/></ProtectedRoute>}></Route>
